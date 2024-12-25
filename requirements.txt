@@ -2,6 +2,7 @@ python-dotenv
 deep-translator
 SpeechRecognition
 gTTS
+pygame
 streamlit
 streamlit-chat
 unstructured==0.16.11
