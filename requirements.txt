@@ -2,7 +2,6 @@ python-dotenv
 deep-translator
 SpeechRecognition
 gTTS
-pygame
 streamlit
 streamlit-chat
 unstructured==0.16.11
@@ -16,4 +15,3 @@ langchain-pinecone==0.2.0
 langchain-openai==0.2.14
 pandas 
 numpy
-pyaudio

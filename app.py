@@ -17,7 +17,7 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_pinecone import PineconeVectorStore
-
+from streamlit_mic_recorder import mic_recorder, speech_to_text
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -85,6 +85,8 @@ def SpeakText(text, lang='en'):
             
         # Cleanup
         pygame.mixer.quit()
+
+        st.audio(temp_filename,autoplay=True)
         os.remove(temp_filename)
         
         # After speech is complete
@@ -106,34 +108,36 @@ def translate_text(text, target_language):
         return translator.translate(text, target='en')
     return text
 
-def start_listening(language='en'):
-    st.session_state.listening = True
-    st.session_state.transcription = ""
+# def start_listening(language='en'):
+#     st.session_state.listening = True
+#     st.session_state.transcription = ""
     
-    status_placeholder = st.empty()
-    with status_placeholder:
-        st.info("Listening now...")  # Show listening status
+#     status_placeholder = st.empty()
+#     with status_placeholder:
+#         st.info("Listening now...")  # Show listening status
     
-    with sr.Microphone() as source:
-        try:
-            r.adjust_for_ambient_noise(source, duration=0.2)
-            audio = r.listen(source, phrase_time_limit=5)
-            # Recognize speech using Google Speech Recognition with the specified language
-            text = r.recognize_google(audio, language=language)
-            st.session_state.transcription = text
-            st.session_state.user_input = text  # Update user_input with recognized text
-            st.session_state.listening = False
-            status_placeholder.empty()
-            process_input()
-        except sr.UnknownValueError:
-            st.session_state.listening = False
-            status_placeholder.empty()
-        except sr.RequestError as e:
-            st.session_state.listening = False
-            status_placeholder.empty()
-        except Exception as e:
-            st.session_state.listening = False
-            status_placeholder.empty()
+#     # with sr.Microphone() as source:
+#     try:
+#         # r.adjust_for_ambient_noise(source, duration=0.2)
+#         # audio = r.listen(source, phrase_time_limit=5)
+#         # Recognize speech using Google Speech Recognition with the specified language
+#         text = r.recognize_google("recording.mp3", language=language)
+#         print(text)
+#         #text = speech_to_text(language=language, use_container_width=True, just_once=True, key='STT')
+#         st.session_state.transcription = text
+#         st.session_state.user_input = text  # Update user_input with recognized text
+#         st.session_state.listening = False
+#         status_placeholder.empty()
+#         process_input()
+#     except sr.UnknownValueError:
+#         st.session_state.listening = False
+#         status_placeholder.empty()
+#     except sr.RequestError as e:
+#         st.session_state.listening = False
+#         status_placeholder.empty()
+#     except Exception as e:
+#         st.session_state.listening = False
+#         status_placeholder.empty()
 
 def process_input():
     user_input = st.session_state.user_input  # Get the user input directly
@@ -201,15 +205,15 @@ def eng_out():
             on_change=process_input
         )
         
-        col1, col2 = st.columns([1, 3])
-        with col1:
-            st.button(
-                "🎤 Speak", 
-                key="speak_button",
-                on_click=start_listening,  # Call without language parameter for English
-                disabled=st.session_state.listening,
-                use_container_width=True
-            )
+        # col1, col2 = st.columns([1, 3])
+        # with col1:
+        #     st.button(
+        #         "🎤 Speak", 
+        #         key="speak_button",
+        #         on_click=start_listening,  # Call without language parameter for English
+        #         disabled=st.session_state.listening,
+        #         use_container_width=True
+        #     )
 
 def tam_out():
     st.title("ஆஸ்டியோமைலிடிஸிற்கான சாட்போட் (தமிழ்)")
@@ -238,15 +242,15 @@ def tam_out():
             on_change=process_input
         )
         
-        col1, col2 = st.columns([1, 3])
-        with col1:
-            st.button(
-                "🎤 பேசவும்", 
-                key="speak_button_ta",
-                on_click=lambda: start_listening(language='ta-IN'),  # Call with Tamil language parameter
-                disabled=st.session_state.listening,
-                use_container_width=True
-            )
+        # col1, col2 = st.columns([1, 3])
+        # with col1:
+        #     st.button(
+        #         "🎤 பேசவும்", 
+        #         key="speak_button_ta",
+        #         on_click=lambda: start_listening(language='ta-IN'),  # Call with Tamil language parameter
+        #         disabled=st.session_state.listening,
+        #         use_container_width=True
+        #     )
 
 def main():
     if 'selected_language' not in st.session_state:
