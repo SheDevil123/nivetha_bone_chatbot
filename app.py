@@ -39,8 +39,6 @@ question_answer_chain = create_stuff_documents_chain(llm, prompt)
 chain = create_retrieval_chain(retriever_new.as_retriever(search_kwargs={'k':5}), question_answer_chain)
 
 
-
-
 # Initialize GoogleTranslator from deep-translator
 translator = GoogleTranslator(source='auto')
 #r = sr.Recognizer()
@@ -62,9 +60,9 @@ if 'speech_complete' not in st.session_state:
 def SpeakText(text, lang='en'):
     try:
         # Create a temporary file
-        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp3')
-        temp_filename = temp_file.name
-        temp_file.close()
+        # temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp3')
+        # temp_filename = temp_file.name
+        # temp_file.close()
         
         st.session_state.is_speaking = True
         st.session_state.speech_complete = False
@@ -74,19 +72,22 @@ def SpeakText(text, lang='en'):
         tts.save("curr.mp3")
         
         # Initialize pygame mixer
-        pygame.mixer.init()
-        pygame.mixer.music.load("curr.mp3")
-        pygame.mixer.music.play()
+        # pygame.mixer.init()
+        # pygame.mixer.music.load("curr.mp3")
+        #pygame.mixer.music.play()
         
         # Wait for the audio to finish playing
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
+        # while pygame.mixer.music.get_busy():
+        #     pygame.time.Clock().tick(10)
             
         # Cleanup
-        pygame.mixer.quit()
+        #pygame.mixer.quit()
+        # with open("curr.mp3", 'rb') as audio:
+        #     st.audio(audio.read(), format='audio/mp3', autoplay=True)
 
-        #st.audio("curr.mp3",autoplay=True)
-        os.remove("curr.mp3")
+        
+        # time.sleep(10)
+        # os.remove("curr.mp3")
         
         # After speech is complete
         st.session_state.is_speaking = False
@@ -191,7 +192,12 @@ def eng_out():
                 if st.button("🔊", key=f"speak_{i}"):
                     if not st.session_state.is_speaking:
                         # Pass language code based on selected language
-                        threading.Thread(target=SpeakText, args=(bot_msg, 'en')).start()
+                        obj=threading.Thread(target=SpeakText, args=(bot_msg, 'en'))
+                        obj.start()
+                        obj.join()
+                        st.audio("curr.mp3", format='audio/mp3', autoplay=True)
+                        #os.remove("curr.mp3")
+                        #SpeakText(bot_msg, lang='en')
 
     # Show input box if not speaking or if speech is complete
     if not st.session_state.is_speaking or st.session_state.speech_complete:
@@ -228,7 +234,10 @@ def tam_out():
                 if st.button("🔊", key=f"speak_{i}"):
                     if not st.session_state.is_speaking:
                         # For Tamil responses
-                        threading.Thread(target=SpeakText, args=(bot_msg, 'ta')).start()
+                        obj=threading.Thread(target=SpeakText, args=(bot_msg, 'ta'))
+                        obj.start()
+                        obj.join()
+                        st.audio("curr.mp3", format='audio/mp3', autoplay=True)
 
     # Show input box if not speaking or if speech is complete
     if not st.session_state.is_speaking or st.session_state.speech_complete:
