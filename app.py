@@ -2,7 +2,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 from deep_translator import GoogleTranslator
-import speech_recognition as sr
+#import speech_recognition as sr
 from gtts import gTTS
 import pygame
 import tempfile
@@ -17,7 +17,6 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_pinecone import PineconeVectorStore
-from streamlit_mic_recorder import mic_recorder, speech_to_text
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -44,7 +43,7 @@ chain = create_retrieval_chain(retriever_new.as_retriever(search_kwargs={'k':5})
 
 # Initialize GoogleTranslator from deep-translator
 translator = GoogleTranslator(source='auto')
-r = sr.Recognizer()
+#r = sr.Recognizer()
 
 # Initialize the state for speech recognition
 if "listening" not in st.session_state:

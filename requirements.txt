@@ -1,6 +1,6 @@
 python-dotenv
 deep-translator
-SpeechRecognition
+#SpeechRecognition
 gTTS
 pygame
 streamlit
