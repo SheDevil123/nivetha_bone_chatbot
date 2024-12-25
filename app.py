@@ -71,11 +71,11 @@ def SpeakText(text, lang='en'):
         
         # Create gTTS object with specified language
         tts = gTTS(text=text, lang=lang)
-        tts.save(temp_filename)
+        tts.save("curr.mp3")
         
         # Initialize pygame mixer
         pygame.mixer.init()
-        pygame.mixer.music.load(temp_filename)
+        pygame.mixer.music.load("curr.mp3")
         pygame.mixer.music.play()
         
         # Wait for the audio to finish playing
@@ -85,8 +85,8 @@ def SpeakText(text, lang='en'):
         # Cleanup
         pygame.mixer.quit()
 
-        st.audio(temp_filename,autoplay=True)
-        os.remove(temp_filename)
+        #st.audio("curr.mp3",autoplay=True)
+        os.remove("curr.mp3")
         
         # After speech is complete
         st.session_state.is_speaking = False
