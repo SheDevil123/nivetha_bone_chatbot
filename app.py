@@ -30,7 +30,7 @@ embeddings=OpenAIEmbeddings(model="text-embedding-3-large",api_key=os.environ['O
 retriever_new = PineconeVectorStore(index_name=index_name, embedding=embeddings)
 prompt = ChatPromptTemplate.from_messages(
     [
-        ("system", "answer the questions based on the given context. if the question is about something that is not related to 'Osteomyelitis' then do not answer the question and reply saying you are a chatbot meant for answering questions related to Osteomyelitis . Context: {context}"),
+        ("system", "answer the questions based on the given context. if the question is about something that is not related to 'Osteomyelitis' then do not answer the question. Context: {context}"),
         ("human", "{input}"),
     ]
 )
